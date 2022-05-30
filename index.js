@@ -1,22 +1,42 @@
 import app from "./server.js";
-import mysql from "mysql";
+import db from "mssql";
 import dotenv from "dotenv";
 
-dotenv.config();
+// PRODUCTION
+const sqlConfig = {
+	user: "ciputraestate",
+	password: "ciputraestate123",
+	database: "ems",
+	server: "36.91.140.55",
+	port: 22222,
+	options: {
+		encrypt: false,
+		enableArithAbort: true,
+		trustServerCertificate: false, // change to true for local dev / self-signed certs
+	},
+};
+// const sqlConfig = {
+// 	user: "sa",
+// 	password: "antihack22",
+// 	database: "ems",
+// 	server: "localhost",
+// 	options: {
+// 		encrypt: false,
+// 		enableArithAbort: true,
+// 		trustServerCertificate: false, // change to true for local dev / self-signed certs
+// 	},
+// };
 const port = process.env.PORT || 3000;
-
-var db = mysql.createConnection({
-	host: process.env.HOST,
-	user: process.env.USERS,
-	password: process.env.PASSWORD,
-	database: process.env.DB,
-});
-
-db.connect(function (err) {
-	if (err) throw err;
-	app.listen(port, () => {
-		console.log(`App listening at http://localhost:${port}`);
+dotenv.config();
+db.connect(sqlConfig)
+	.then(() => {
+		app.listen(port, () => {
+			console.log(`App listening at http://localhost:${port}`);
+		});
+	})
+	.catch((err) => {
+		console.error("Unable to connect to the database:", err);
+		console.error("Cancelling app server launch");
 	});
-});
 
 export default db;

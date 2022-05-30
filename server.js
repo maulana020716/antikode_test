@@ -1,8 +1,6 @@
 import express from "express";
 import cors from "cors";
-import brand from "./routes/brand.route.js";
-import outlet from "./routes/outlet.route.js";
-import product from "./routes/product.route.js";
+import master from "./routes/master.route.js";
 
 const app = express();
 
@@ -14,8 +12,6 @@ app.use(
 		extended: true,
 	})
 );
-app.use("/outlet", outlet);
-app.use("/brand", brand);
-app.use("/product", product);
+app.use("/master", master);
 
 export default app;
